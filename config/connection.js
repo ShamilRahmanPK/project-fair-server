@@ -8,6 +8,4 @@ mongoose.connect(connection_string).then((res)=>{
 }).catch(err=>{
     console.log("MONGODB ATLAS connection failed!!");
     console.log(err);
-    
-    
 })
