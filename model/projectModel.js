@@ -26,6 +26,10 @@ const projectSchema = new mongoose.Schema({
         type:String,
         require:true
     },
+    userId : {
+        type:String,
+        require:true
+    }
 })
 
 const projects = mongoose.model("projects",projectSchema)
