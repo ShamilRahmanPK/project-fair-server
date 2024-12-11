@@ -48,3 +48,23 @@ exports.loginController = async (req,res) => {
         res.status(401).json(err)
     }
 }
+
+// profile pdation
+
+exports.editUserController = async (req,res)=>{
+    console.log("inside editUserController");
+    // get id of the user from jwtmidlleware
+    const userId = req.userId
+    // multer will active in this route
+    // get text data from req.body file from req.file
+    const {username,email,password,github,linkdin,profilePic} = req.body
+    const uploadedProfileImgFile = req.file?req.file.filename:profilePic
+    // update user
+    try {
+        const updateUser =  await users.findByIdAndUpdate({_id:userId},{username,email,password,github,linkdin,profilePic:uploadedProfileImgFile},{new:true})
+        await updateUser.save()
+        res.status(200).json(updateUser)
+    } catch (err) {
+        res.status(401).json(err)
+    }
+}

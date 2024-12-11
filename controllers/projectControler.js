@@ -1,4 +1,5 @@
-const projects = require('../model/projectModel')
+const projects = require('../model/projectModel');
+const users = require('../model/userModel');
 
 // add project
 exports.addProjectController = async (req,res)=>{
@@ -64,3 +65,41 @@ exports.getAllProjectsController = async (req,res)=>{
         res.status(401).json(err)
     }
 }
+
+// edit Project details
+exports.editProjectController = async (req,res)=>{
+    console.log("editAllProjectController");
+    // get all project id from reqest params
+    const {id} = req.params
+    
+    const {title,languages,overview,github,website,projectImage} = req.body
+    // to get file data req.file
+    const reUploadedFileName = req.file?req.file.filename:projectImage
+    // to get userId  use middleware
+    const userId = req.userId
+    console.log(title,languages,overview,github,website,reUploadedFileName,userId);
+    
+    try {
+        const updateProject = await projects.findByIdAndUpdate({_id:id},{title,languages,overview,github,website,projectImage:reUploadedFileName,userId},{new:true})
+        await updateProject.save()
+        res.status(200).json(updateProject)
+    } catch (err) {
+        res.status(401).json(err)
+    }
+    
+}
+
+// remove project
+exports.removeProjectController = async (req,res)=>{
+    console.log("inside removeProjectController");
+    // get id of the project from req params
+    const {id} = req.params
+    // delete project
+    try {
+        const removeProject = await projects.findByIdAndDelete({_id:id})
+        res.status(200).json(removeProject)
+    } catch (err) {
+        res.status(401).json(err)
+    }
+}
+
